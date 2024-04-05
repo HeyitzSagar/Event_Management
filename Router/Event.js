@@ -1,11 +1,11 @@
 import express from 'express';
-import Event from '../Models/Event';
+import{Event} from '../Models/Event.js';
 
 const router = express.Router();
 
 // Creating a Event API
 
-router.post('/', async(req, res) => {
+router.post('/CreateEvent', async(req, res) => {
     try {
         const {eventName, startTime, duration} = req.body;
         const event = new Event({eventName, startTime, duration});
@@ -18,7 +18,7 @@ router.post('/', async(req, res) => {
 
 // Get all Events API
 
-router.get('/', async(req, res) => {
+router.get('/AllEvent', async(req, res) => {
     try {
         const events = await Event.find();
         res.json({events});
@@ -55,12 +55,23 @@ router.get('/upcoming', async (req, res) => {
 router.get('/live', async (req, res) => {
     try {
         const currentTime = new Date();
-        const tenMinutesBefore = new Date(currentTime.get() - 10 * 60000);
-        const liveEvents = await Event.find({ startTime: { $gt: tenMinutesBefore, $lt:currentTime} });
+        const tenMinutesBefore = new Date(currentTime.getTime() - 10 * 60000);
+
+        // Find all events from the database
+        const allEvents = await Event.find();
+
+        // Filter live events based on start time
+        const liveEvents = allEvents.filter(event => {
+            const startTime = new Date(event.startTime);
+            return startTime >= tenMinutesBefore && startTime <= currentTime;
+        });
+
         res.json(liveEvents);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 })
 
-module.exports = router;
+
+
+export {router as eventRouter}
