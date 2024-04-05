@@ -1,6 +1,6 @@
 Event Management API
 
-This powerful API provides a comprehensive range of functionalities to manage events, including creating, retrieving, updating, and deleting events. It also classifies events into upcoming and live categories, giving you maximum control over your events.
+This powerful API provides a comprehensive range of functionalities to manage events, including creating, and getting all events, upcoming events, and live events. It also classifies events into upcoming and live categories, giving you maximum control over your events.
 
 Database Schema
 
